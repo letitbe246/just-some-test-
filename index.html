@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Check</title>
+    <style>
+        body {
+            background-image: url('image heheh.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            justify-content: center;
+        }
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #000000;
+            color: #00008b;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 48px;
+            font-family: 'Georgia', serif;
+        }
+        .details {
+            font-size: 22px;
+            font-weight: bold;
+            font-family: 'Verdana', sans-serif;
+            text-align: right;
+            cursor: pointer;
+            color: #8b0000;
+        }
+        .details-content {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, #00008b, #8b0000);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        .question {
+            margin-bottom: 15px;
+            font-size: 26px;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+        button {
+            background-color: #58a6ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #1f6feb;
+        }
+    </style>
+    <script>
+        function toggleDetails() {
+            const detailsContent = document.getElementById('detailsContent');
+            detailsContent.style.display = detailsContent.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Mental Health Check</h1>
+        <div class="details" onclick="toggleDetails()">Details</div>
+        <div class="details-content" id="detailsContent">
+            <p>Check your mental health status</p>
+            <p>Answer honestly for accurate results</p>
+        </div>
+    </div>
+
+    <div class="container" id="startScreen">
+        <button onclick="startTest()">Start Test</button>
+    </div>
+
+    <div class="container" id="quizScreen" style="display: none;">
+        <div id="questionContainer"></div>
+        <button id="nextButton" onclick="nextQuestion()">Next</button>
+    </div>
+
+    <div class="container" id="resultScreen" style="display: none;">
+        <h2>Your Depression Level: <span id="score"></span>%</h2>
+        <button onclick="restartTest()">Try Again</button>
+    </div>
+
+    <script>
+        const questions = [
+            "Do you often feel hopeless?",
+            "Do you have trouble concentrating on tasks?",
+            "I feel tired or have little energy.",
+            "I have trouble falling or staying asleep.",
+            "Do you struggle to enjoy things you used to?",
+            "I feel bad about myself or that I am a failure.",
+            "I have little interest or pleasure in doing things.",
+            "I feel anxious or worried most of the time.",
+            "I experience sudden mood swings.",
+            "I feel disconnected from my surroundings.",
+            "I have difficulty making decisions.",
+            "I find it hard to relax or feel at ease.",
+            "I frequently feel overwhelmed by daily tasks.",
+            "I feel restless or easily irritated.",
+            "I have trouble managing stress.",
+            "I feel isolated or lonely even when with others.",
+            "I have experienced panic attacks.",
+            "I feel like my thoughts are racing or out of control.",
+            "I struggle with self-confidence and self-worth.",
+            "I avoid social interactions because of anxiety or sadness.",
+            "I feel exhausted even after a full night's sleep.",
+            "I find it difficult to focus on important tasks.",
+            "I experience changes in appetite or weight.",
+            "I often feel guilty or ashamed for no clear reason.",
+            "I have difficulty finding motivation to do everyday activities.",
+            "I sometimes have thoughts of harming myself or ending my life.",
+            "I feel emotionally numb or detached from people around me.",
+            "I experience a loss of interest in hobbies or activities I once enjoyed.",
+            "I feel like I'm constantly under pressure or tension.",
+            "I often feel like I'm not good enough no matter what I do."
+        ];
+        let currentQuestionIndex = 0;
+        let totalScore = 0;
+
+        function startTest() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('quizScreen').style.display = 'flex';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            let questionContainer = document.getElementById('questionContainer');
+            questionContainer.innerHTML = `
+                <div class="question">
+                    <p>${questions[currentQuestionIndex]}</p>
+                    <input type="radio" name="answer" value="0"> No<br>
+                    <input type="radio" name="answer" value="3"> Yes
+                </div>
+            `;
+        }
+
+        function nextQuestion() {
+            let answer = document.querySelector('input[name="answer"]:checked');
+            if (answer) {
+                totalScore += parseInt(answer.value);
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            } else {
+                alert("Please select an answer.");
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quizScreen').style.display = 'none';
+            document.getElementById('resultScreen').style.display = 'flex';
+            let percentage = Math.round((totalScore / (questions.length * 3)) * 100);
+            document.getElementById('score').innerText = percentage;
+        }
+
+        function restartTest() {
+            currentQuestionIndex = 0;
+            totalScore = 0;
+            document.getElementById('resultScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
